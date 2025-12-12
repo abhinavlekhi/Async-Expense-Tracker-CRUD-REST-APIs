@@ -25,6 +25,8 @@ public class ExpenseService {
     private ExpenseRepository expenseRepository;
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private ExpenseEventProducer producer;
 
     // 1. Create  (Add new Expense)
     @CacheEvict(value= "expenseCache", /*,"all_expenses"*/ allEntries = true)
@@ -35,8 +37,10 @@ public class ExpenseService {
         expense.setAmount(dto.getAmount());
         expense.setNotes(dto.getNotes());
         expense.setDate(dto.getDate());
-        auditService.logAudit("CREATED", expenseRepository.save(expense));
-        return expenseRepository.save(expense);
+        Expense saved = expenseRepository.save(expense);
+        auditService.logAudit("CREATED", saved);
+        producer.publishExpenseEventCreatedEvent(saved);
+        return saved;
     }
 
     // 2. Read (Get all expenses)
