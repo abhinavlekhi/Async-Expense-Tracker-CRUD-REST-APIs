@@ -69,6 +69,7 @@ public class ExpenseService {
     public void deleteExpenseById(UUID id) {
         Expense expense = expenseRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Could not delete the Expense as no expense was found with provided id: "+id));
+        producer.publishExpenseDeletedEvent(id);
         auditService.logAudit("DELETED", expense);
         expenseRepository.deleteById(id);
     }
