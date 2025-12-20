@@ -38,8 +38,8 @@ public class ExpenseService {
         expense.setNotes(dto.getNotes());
         expense.setDate(dto.getDate());
         Expense saved = expenseRepository.save(expense);
-        auditService.logAudit("CREATED", saved);
         producer.publishExpenseEventCreatedEvent(saved);
+        auditService.logAudit("CREATED", saved);
         return saved;
     }
 
@@ -61,7 +61,7 @@ public class ExpenseService {
     @Cacheable(value= "expenseCache", key= "#id")
     public Expense getExpenseById(UUID id) {
         return expenseRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Expense with id "+id+" not found"));
+                () -> new EntityNotFoundException("Expense with id: "+id+" not found"));
     }
 
     // 4. Delete (delete expense by id)
