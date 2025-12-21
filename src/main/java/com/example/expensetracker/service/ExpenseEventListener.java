@@ -17,7 +17,7 @@ public class ExpenseEventListener {
         System.out.println("Received Expense event: "+ expense);
     }
 
-    @KafkaListener(topics = "expense-deleted-events", groupId = "expense-consumer-group")
+    @KafkaListener(topics = "expense-deleted-events", groupId = "expense-consumer-group", containerFactory = "kafkaListenerContainerFactory")
     public void handleExpenseDeletedEvent(ExpenseDeletedEvent expenseDeletedEvent) {
         if (System.currentTimeMillis() % 2 == 0) {   // condition added to simulate failures and observe retries + DLQ behavior
             throw new RuntimeException("Simulated downstream processing failed for id: "+expenseDeletedEvent.getId());

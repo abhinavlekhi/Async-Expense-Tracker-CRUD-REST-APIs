@@ -4,7 +4,10 @@ import org.apache.kafka.common.TopicPartition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
@@ -20,6 +23,19 @@ public class KafkaConfig {
         DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
                 (record, exception) ->
                         new TopicPartition("expense-deleted-events-dlt", record.partition()));
-        return new DefaultErrorHandler(recoverer, new FixedBackOff(2000, 3)); // 3 retries with 2 secs interval
+        DefaultErrorHandler errorHandler =
+                new DefaultErrorHandler(recoverer, new FixedBackOff(2000, 3)); // 3 retries with 2 secs interval
+        errorHandler.addNotRetryableExceptions(IllegalArgumentException.class);
+        return errorHandler;
+    }
+
+    @Bean("dlqKafkaListenerContainerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, Object> dlqKafkaListenerContainerFactory(
+            ConsumerFactory<String, Object> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setCommonErrorHandler(new DefaultErrorHandler()); // No Retries for DLQ
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.setConsumerFactory(consumerFactory);
+        return factory;
     }
 }
