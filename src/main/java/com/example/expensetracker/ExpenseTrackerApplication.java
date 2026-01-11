@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
 @SpringBootApplication
-@EnableCaching
+@EnableCaching //This annotation enables cache support in application
 @EnableScheduling
 public class ExpenseTrackerApplication {
 

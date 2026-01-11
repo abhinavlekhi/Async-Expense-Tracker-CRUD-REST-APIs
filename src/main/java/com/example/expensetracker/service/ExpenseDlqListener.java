@@ -41,7 +41,7 @@ public class ExpenseDlqListener {
         try {
             dlqEventRepository.save(dlq);
         } catch(Exception e) {
-            log.error("DLQ Event received: {}, Exception: {}", dlq, e);
+            log.error("DLQ Event received: {}, Exception: {}", dlq, e.getMessage());
         }
         System.out.println("DLQ Event stored in DB: "+ ede.getId());
     }

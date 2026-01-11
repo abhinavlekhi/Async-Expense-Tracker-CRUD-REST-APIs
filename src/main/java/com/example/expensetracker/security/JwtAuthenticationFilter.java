@@ -14,7 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
+@Component //Component annotation indicates that this is a spring-managed bean, usually @Component annotation is found
+//on classes that implement some cross-cutting concern such as logging / security / transaction management etc.
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired

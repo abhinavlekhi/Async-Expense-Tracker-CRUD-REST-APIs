@@ -28,7 +28,8 @@ public class ExpenseService {
     @Autowired
     private ExpenseEventProducer producer;
 
-    // 1. Create  (Add new Expense)
+    // 1. Create  (Add new Expense),
+    // @cacheEvict to evict the cache, meaning when a new expense is added the cache is cleared so that next time when getAllExpenses is called it fetches fresh data from DB
     @CacheEvict(value= "expenseCache", /*,"all_expenses"*/ allEntries = true)
     public Expense addExpense(ExpenseRequestDTO dto) {
 
@@ -65,7 +66,7 @@ public class ExpenseService {
     }
 
     // 4. Delete (delete expense by id)
-    @CacheEvict(value = {"expenseCache"/*,"all_expenses"*/}, key= "#id", allEntries = true)
+    @CacheEvict(value = {"expenseCache"/*,"all_expenses"*/}, key= "#id")
     public void deleteExpenseById(UUID id) {
         Expense expense = expenseRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Could not delete the Expense as no expense was found with provided id: "+id));
@@ -75,7 +76,7 @@ public class ExpenseService {
     }
 
     // 5. Update (expense by id)
-    @CacheEvict(value = {"expenseCache" /*,"all_expenses"*/}, key= "#id", allEntries = true)
+    @CacheEvict(value = {"expenseCache" /*,"all_expenses"*/}, key= "#id")
     public Expense updateExpensePartially(UUID id, ExpenseRequestDTO dto) {
         Expense existingExpense = expenseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Could not update the Expense as no expense was found with provided id: " + id));
         if (dto.getExpenseTitle() != null && !dto.getExpenseTitle().equals(existingExpense.getExpenseTitle())) {

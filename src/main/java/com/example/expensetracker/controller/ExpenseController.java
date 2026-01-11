@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RestController
+@RestController   // RestController = @Controller+@ResponseBody, handles HTTP request, returns JSON/XML response.
 @RequestMapping("/api/expenses")
 public class ExpenseController {
     @Autowired // basically we are injecting our service class here since controller does not know about repository directly

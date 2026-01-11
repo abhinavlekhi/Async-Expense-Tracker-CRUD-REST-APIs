@@ -8,7 +8,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
+@Data // DTO is nothing but the payload structure that controller receives from the client OR sends back to client, meaning it is used for data transfer
 public class ExpenseRequestDTO {
 
     @NotBlank(message = "Expense title cannot be blank")
