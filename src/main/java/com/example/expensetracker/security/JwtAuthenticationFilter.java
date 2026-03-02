@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-            throws ServletException, IOException {
+            throws ServletException, IOException { //this method is overriden from OncePerRequestFilter class, usecase of this method is to perform filtering logic on request, by examining headers, tokens
 
         String path = request.getRequestURI();
 
@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
+            token = authHeader.substring(7); // Our token value starts at 7th index meaning?? after "Bearer " <tokenValue>
             try {
                 username = jwtUtil.extractUsername(token);
             } catch (Exception e) {

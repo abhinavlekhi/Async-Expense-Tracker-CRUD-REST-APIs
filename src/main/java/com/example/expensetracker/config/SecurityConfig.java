@@ -42,7 +42,7 @@ public class SecurityConfig { // Beginning point of JWT based authentication.
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    @Bean // A Bean is nothing but an obj. managed by spring container
     public AuthenticationManager authManager(AuthenticationConfiguration config) // used to authenticate user credentials during login
             throws Exception {
         return config.getAuthenticationManager();

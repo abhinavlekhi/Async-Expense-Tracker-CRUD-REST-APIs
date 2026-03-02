@@ -23,7 +23,7 @@ public class ExpenseSummaryScheduler {
         this.expenseRepository = expenserepository;
     }
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 0 8 * * *") // This cron job expression means at 8AM every day it will run and send the summary
     public void sendDailySummary() {
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);

@@ -13,7 +13,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
-@EnableKafka
+@EnableKafka // This annotation is required to enable listener methods annotated with @KafkaListener
 public class KafkaConfig {
     //Default Error Handler would come into play only if the listener method throws exception, the DLQ i.e
     // "expense-deleted-events-dlt" would be used only if all retry attempts are exhausted. Before message
