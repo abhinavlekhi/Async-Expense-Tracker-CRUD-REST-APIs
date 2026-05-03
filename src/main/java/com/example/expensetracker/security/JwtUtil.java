@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -22,9 +23,10 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("userName", userName);
-
+        String jti = UUID.randomUUID().toString();
+        claims.put(Claims.ID, jti);
         long expirationTime = 1000*60*60; //1hr
-        return Jwts.builder().setClaims(claims).setSubject(userName).setIssuedAt(new Date()).
+        return Jwts.builder().setSubject(userName).addClaims(claims).setIssuedAt(new Date()).
                 setExpiration(new Date(System.currentTimeMillis()+expirationTime)).
                 signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
