@@ -66,11 +66,40 @@ public class ExpenseServiceTest {
         verify(expenseRepository).findByExpenseTitleAndDate("Groceries", date);
     }
 
+    @Test
+    void getAllExpenseUsesTitleWhenOnlyTitleIsProvided() {
+        List<Expense> expected = List.of();
+        when(expenseRepository.findByExpenseTitle("Groceries")).thenReturn(expected);
+
+        assertSame(expected, expenseService.getAllExpense("Groceries", null));
+        verify(expenseRepository).findByExpenseTitle("Groceries");
+    }
+
+    @Test
+    void getAllExpenseUsesDateWhenOnlyDateIsProvided() {
+        LocalDate date= LocalDate.of(2026, 9, 1);
+        List<Expense> expected = List.of();
+        when(expenseRepository.findByDate(date)).thenReturn(expected);
+
+        assertSame(expected, expenseService.getAllExpense(null, date));
+        verify(expenseRepository).findByDate(date);
+    }
+
+    @Test
+    void getAllExpenseReturnsAllExpensesWhenNoFiltersAreProvided() {
+        List<Expense> expected = List.of();
+        when(expenseRepository.findAll()).thenReturn(expected);
+        assertSame(expected, expenseService.getAllExpense(null, null));
+        verify(expenseRepository).findAll();
+    }
+
     private static ExpenseRequestDTO request(
             String title, String amount, String notes, LocalDate date) {
         ExpenseRequestDTO dto = new ExpenseRequestDTO();
         dto.setExpenseTitle(title);
-        dto.setAmount(amount == null ? null : new BigDecimal(amount));
+        if (amount != null) {
+            dto.setAmount(new BigDecimal(amount));
+        }
         dto.setNotes(notes);
         dto.setDate(date);
         return dto;
