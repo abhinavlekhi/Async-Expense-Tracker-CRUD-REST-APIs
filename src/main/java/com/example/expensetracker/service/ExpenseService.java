@@ -97,8 +97,9 @@ public class ExpenseService {
         if(dto.getDate() != null) {
             existingExpense.setDate(dto.getDate());
         }
-        auditService.logAudit("UPDATED", expenseRepository.save(existingExpense));
-        return expenseRepository.save(existingExpense);
+        Expense saved = expenseRepository.save(existingExpense);
+        auditService.logAudit("UPDATED", saved);
+        return saved;
     }
 
     public Page<Expense> getExpenses(Pageable pageable) {
