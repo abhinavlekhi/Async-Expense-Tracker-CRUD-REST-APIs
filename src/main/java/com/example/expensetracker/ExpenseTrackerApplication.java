@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication // SpringBootApplication annotation is a combination of @Configuration + @EnableAutoConfiguration + @ComponentScan annotations, here @Configuration marks class as source of bean definations, @EnableAutoConfiguration automatically configures spring components based on dependencies present in classpath, lastly @ComponentScan scans for packages with @Component, @repository, @Service, @Controller and creates bean defination and stores them in application context.
 @EnableCaching //This annotation enables cache support in application
 @EnableScheduling
 public class ExpenseTrackerApplication {

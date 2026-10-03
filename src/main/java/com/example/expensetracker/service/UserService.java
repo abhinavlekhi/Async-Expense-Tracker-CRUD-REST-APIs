@@ -28,7 +28,8 @@ public class UserService {
     }
 
     public String login(LoginRequestDTO dto) {
-        User user = userRepository.findByUserName(dto.getUsername()).orElseThrow(() -> new RuntimeException("Invalid Username/password"));
+        User user = userRepository.findByUserName(
+                dto.getUsername()).orElseThrow(() -> new RuntimeException("Invalid Username/password"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid username / password");
