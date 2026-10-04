@@ -98,6 +98,7 @@ public class ExpenseService {
             existingExpense.setDate(dto.getDate());
         }
         Expense saved = expenseRepository.save(existingExpense);
+        producer.publishExpenseUpdatedEvent(saved);
         auditService.logAudit("UPDATED", saved);
         return saved;
     }

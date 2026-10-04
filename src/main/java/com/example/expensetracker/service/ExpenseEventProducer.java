@@ -22,4 +22,8 @@ public class ExpenseEventProducer {
         ExpenseDeletedEvent expenseDeletedEvent = new ExpenseDeletedEvent(id);
         kafkaTemp.send("expense-deleted-events", id.toString(), expenseDeletedEvent);
     }
+
+    public void publishExpenseUpdatedEvent(Expense expense) {
+        kafkaTemp.send("expense-events", expense.getId().toString(), expense);
+    }
 }
