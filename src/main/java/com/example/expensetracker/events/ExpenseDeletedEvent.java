@@ -10,5 +10,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExpenseDeletedEvent {
-    private UUID id;
+    private UUID eventId; // this one is going to be the eventId for each expense
+    private UUID id; //expenseID
 }
